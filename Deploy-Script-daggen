@@ -1,0 +1,8 @@
+#!/bin/bash  
+COUNTER=0;
+while true; do
+  	sudo ./daggen dracaena
+	 COUNTER=$((COUNTER+1))
+	echo "Restarting the miner in 10 seconds..."
+    sleep 10
+done

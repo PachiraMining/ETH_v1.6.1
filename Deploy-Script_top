@@ -1,0 +1,43 @@
+#!/bin/bash  
+COUNTER=0
+echo 'Input number of FPGAs:'
+read fpganumber
+
+sudo chmod +x ./rescan.sh
+sudo ./rescan.sh
+sleep 1
+
+sudo chmod +x ethminer
+sleep 1
+
+cd XilinxAR65444-master/Linux/Xilinx_Answer_65444_Linux_Files/driver/
+sudo make clean
+sleep 2
+sudo make
+sleep 10
+cd ../tests/
+sudo chmod +x ./load_driver.sh
+sudo ./load_driver.sh
+sleep 3
+
+sudo killall -9 ethminer
+
+
+echo 'If DONE, please input "y" to start miner'
+echo 'If FAILED, please input "n" to reboot'
+echo 'Or ELSE, please input "e" or "Ctrl + Z" to exit'
+read action
+cd ../../../..
+ case $action in
+        [Yy]* ) while [ $COUNTER -lt $fpganumber ]; do
+		gnome-terminal -x bash -c "sudo ./Deploy-Script $COUNTER;bash"
+ 		COUNTER=$((COUNTER+1))
+ 		sleep 15
+		done
+		gnome-terminal -x bash -c  "sudo ./Deploy-Script-daggen;bash"
+		sleep 5;;
+        [Nn]* ) sudo reboot;;
+	[Ee]* ) exit;;
+    esac
+
+

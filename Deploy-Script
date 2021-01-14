@@ -1,0 +1,21 @@
+#!/bin/bash  
+COUNTER=0;
+declare -i timeretry
+timeretry=$1*2+10
+while true; do
+    #rmmod ftdi_sio
+    
+			
+	if [ $COUNTER -lt 1 ]
+		then
+			sudo pkill -f "./ethminer --fpga -a 550 -b 270 -c 120 -n $1"
+			sudo ./ethminer --fpga -a 550 -b 270 -c 120 -n $1 -e -d -f -q 100 -P stratum+tcp://0x2784685ba4a940406b185f945c26104d64f7562e.dracaena$1@us2.ethermine.org:4444
+		else
+			sudo pkill -f "./ethminer --fpga -a 550 -b 270 -c 120 -n $1"
+			sudo ./ethminer --fpga -a 550 -b 270 -c 120 -n $1 -e -d -f -q 100 -P stratum+tcp://0x2784685ba4a940406b185f945c26104d64f7562e.dracaena$1@us2.ethermine.org:4444
+
+		fi
+	 COUNTER=$((COUNTER+1))
+	echo "Restarting the miner in $timeretry seconds..."
+    sleep $timeretry
+done
